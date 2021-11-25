@@ -8,6 +8,9 @@ import User from './components/pages/user/user'
 import NewUser from './components/pages/user/newUser'
 
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import ClaseList from './components/claseList/claseList';
+import Clase from './components/pages/clase/clase';
+import NewClase from './components/pages/clase/newClase'
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
               <Route path='/users' element={<UserList/>}/>
               <Route path='/user/:userId' element={<User/>}/>
               <Route path='/newUser' element={<NewUser/>}/>
+              <Route path='/clases' element={<ClaseList/>}/>
+              <Route path='/clase/:claseId' element={<Clase/>}/>
+              <Route path='/newClase' element={<NewClase/>}/>
           </Routes>
       </div>
     </Router>

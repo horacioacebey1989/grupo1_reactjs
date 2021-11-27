@@ -25,16 +25,8 @@ export default function sidebar() {
                 <h3 className='sidebarTitle'>Ventas</h3>
                 <ul className='sidebarList'>
                     <li className='sidebarListItem'>
-                        <Home />  
-                        Home  
-                    </li>
-                    <li className='sidebarListItem'>
-                        <Shop />
-                        Shop    
-                    </li>
-                    <li className='sidebarListItem'>
-                        <Android />
-                        Android    
+                        <Home/>  
+                        Horarios  
                     </li>
                 </ul>
             </div>

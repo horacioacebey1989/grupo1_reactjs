@@ -11,12 +11,20 @@ export default function UserList() {
 const [data, setData] = useState([]);
 
 useEffect(() => {
-    const getTipo = () =>{
-        fetch('http://localhost:3800/api/listadoTipoUsuarios/1')
+    const getUsuarios = () =>{
+        fetch('http://localhost:3800/api/getUsuarios')
         .then(res => res.json())
-        .then(res => {if(res) setData(res.tipo)})
+        .then(res => {
+            if(res) {
+                res.Usuarios.forEach(usuario => {
+                    usuario.fecha_nacimiento = usuario.fecha_nacimiento.split(":")[0].split("T")[0]
+                });
+                
+                setData(res.Usuarios)
+            }
+        })
     }
-    getTipo()
+    getUsuarios()
 }, [])
 
 const handleDelete = (id) =>{
@@ -29,19 +37,20 @@ const handleDelete = (id) =>{
         },
     }
 
-    fetch('http://localhost:3800/api/deleteTipoUsuario/'+id,requesInit)
+    fetch('http://localhost:3800/api/deleteUsuario/'+id,requesInit)
     .then(res => res.json())
     .then(res => {if(res){
-        console.log(res.tipoUsuario);
+        console.log(res.Usuario);
         alert('El usuario fue eliminado!');
     }})
-
 }
 
 const columns = [
-    { field: '_id', headerName: 'ID', width: 250 },
+    //{ field: '_id', headerName: 'ID', width: 250 },
     { field: 'nombre', headerName: 'Nombre', width: 130 },
-    { field: 'estado',headerName: 'Estado',width: 150,},
+    { field: 'fecha_nacimiento',headerName: 'Fecha de nacimiento',width: 150,},
+    { field: 'contacto', headerName: 'Contacto', width: 150 },
+    { field: 'username', headerName: 'Nombre de usuario', width: 150 },
     { field: 'actions', headerName: 'Acciones', width: 150,
         renderCell: (params) =>{
             return(

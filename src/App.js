@@ -12,6 +12,10 @@ import ClaseList from './components/claseList/claseList';
 import Clase from './components/pages/clase/clase';
 import NewClase from './components/pages/clase/newClase'
 
+import MateriaParticularList from './components/materiaParticularList/materiaParticularList';
+import MateriaParticular from './components/pages/materiaParticular/materiaParticular';
+import NewMateriaParticular from './components/pages/materiaParticular/newMateriaParticular'
+
 function App() {
   return (
     <Router>
@@ -26,6 +30,9 @@ function App() {
               <Route path='/clases' element={<ClaseList/>}/>
               <Route path='/clase/:claseId' element={<Clase/>}/>
               <Route path='/newClase' element={<NewClase/>}/>
+              <Route path='/materiasParticulares' element={<MateriaParticularList/>}/>
+              <Route path='/materiaParticular/:materiaParticularId' element={<MateriaParticular/>}/>
+              <Route path='/newMateriaParticular' element={<NewMateriaParticular/>}/>
           </Routes>
       </div>
     </Router>

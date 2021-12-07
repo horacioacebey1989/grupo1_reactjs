@@ -14,7 +14,10 @@ import NewClase from './components/pages/clase/newClase'
 
 import MateriaParticularList from './components/materiaParticularList/materiaParticularList';
 import MateriaParticular from './components/pages/materiaParticular/materiaParticular';
-import NewMateriaParticular from './components/pages/materiaParticular/newMateriaParticular'
+import NewMateriaParticular from './components/pages/materiaParticular/newMateriaParticular';
+
+import Reserva from './components/pages/reservas/reservas';
+import NewReserva from './components/pages/reservas/newReserva';
 
 function App() {
   return (
@@ -33,6 +36,8 @@ function App() {
               <Route path='/materiasParticulares' element={<MateriaParticularList/>}/>
               <Route path='/materiaParticular/:materiaParticularId' element={<MateriaParticular/>}/>
               <Route path='/newMateriaParticular' element={<NewMateriaParticular/>}/>
+              <Route path='/Reserva' element={<Reserva/>}/>
+              <Route path='/newReserva' element={<NewReserva/>}/>
           </Routes>
       </div>
     </Router>

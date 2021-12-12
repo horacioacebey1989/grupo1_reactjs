@@ -1,23 +1,11 @@
 import React ,{ useState, useEffect } from 'react'
-import { DataGrid} from '@material-ui/data-grid'
 import './claseList.css'
-import {userRows} from '../../dataTest'
-import {Link} from 'react-router-dom'
-import { DeleteOutlineOutlined } from "@material-ui/icons"
+import {Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 
 export default function ClaseList() {
     const [data, setData] = useState([]);
 
-    /*
-        limite : Number,
-        costo_hora : Number,
-        direccion : String,
-        descripcion : String,
-        visible : Boolean,
-        id_usuario : {type : Schema.ObjectId, ref : 'Usuario'},
-        id_materia_particular : {type : Schema.ObjectId, ref : 'Materia_Particular'}
-    */
-    
+
     useEffect(() => {
         const getClases = () =>{
             fetch('http://localhost:3800/api/getClases')
@@ -30,55 +18,73 @@ export default function ClaseList() {
         }
         getClases()
     }, [])
-    
-    const handleDelete = (id) =>{
-        setData(data.filter((item) => item.id !== id ))
-    
-        const requesInit ={
-            method : 'PUT',
-            headers : {
-                'Content-Type':'application/json',
-            },
-        }
-    
-        fetch('http://localhost:3800/api/deleteClase/'+id,requesInit)
-        .then(res => res.json())
-        .then(res => {if(res){
-            console.log(res.Clase);
-            alert('La clase fue eliminada!');
-        }})
-    }
-    
+
     const columns = [
-        //{ field: '_id', headerName: 'ID', width: 250 },
-        { field: 'limite', headerName: 'Limite de estudiantes', width: 130 },
-        { field: 'costo_hora',headerName: 'Costo/Hora',width: 150,},
-        { field: 'direccion', headerName: 'Direccion', width: 150 },
-        { field: 'descripcion', headerName: 'Descripcion', width: 150 },
-        { field: 'actions', headerName: 'Acciones', width: 150,
-            renderCell: (params) =>{
-                return(
-                    <>  
-                        <Link to={"/clase/"+params.row._id} state={{ claseSend : params.row }}>
-                            <button className='userListEdit'>Edit</button>
-                        </Link>
-                        <DeleteOutlineOutlined className='userListDelete' onClick={()=>handleDelete(params.row._id)}/>
-                    </>
-                )
-            }
-        }
+        {
+            id: "materia",
+            label: "Materia Particular",
+            minWidth: 170,
+            align: "center",
+        },
+        {
+            id: "direccion",
+            label: "Dirección",
+            minWidth: 170,
+            align: "center",
+        },
+        {
+            id: "Limite",
+            label: "Limite",
+            minWidth: 170,
+            align: "center",
+        },      
+        {
+            id: "Costo",
+            label: "Costo x Hora",
+            minWidth: 170,
+            align: "center",
+        },
+        {
+            id: "Acciones",
+            label: "Acciones",
+            minWidth: 170,
+            align: "center",
+        },
       ];
       
-        return (
-            <div className='userList'>
-                <DataGrid
-                    getRowId={(row)=>row._id}
-                    rows={data}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
-                    checkboxSelection
-                />
-            </div>
-        )
+return (
+    <div className='userList'>
+        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell key={column.id} align={column.align} style={{ top: 57, minWidth: column.minWidth }}>
+                  <b>{column.label}</b>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+        <TableBody>
+            {(data).map((row) => (
+              <TableRow key={row._id}>
+                <TableCell style={{ width: 160 }} align="center">
+                  {row.id_materia_particular}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="center">
+                  {row.direccion}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="center">
+                  {row.limite + " alumnos"}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="center">
+                  {row.costo_hora + " Bs."}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+    </div>
+);
+
+
 }

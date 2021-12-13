@@ -54,7 +54,7 @@ export default function ModalReservas(clase) {
 
     return (
         <div>
-          <Grid align="right"  style={{ marginLeft: 75 }}>
+          <Grid align="right"  style={{ marginCenter: 75 }}>
             <Button variant="contained" color="primary" size="small"
               onClick={() => {
                 handleClickOpen();

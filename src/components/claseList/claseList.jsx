@@ -1,10 +1,9 @@
 import React ,{ useState, useEffect } from 'react'
 import './claseList.css'
 import {Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
-
+import ModalReservas from "../modals/ModalReservas";
 export default function ClaseList() {
     const [data, setData] = useState([]);
-
 
     useEffect(() => {
         const getClases = () =>{
@@ -65,7 +64,7 @@ return (
             </TableRow>
           </TableHead>
         <TableBody>
-            {(data).map((row) => (
+            {data.map((row) => (
               <TableRow key={row._id}>
                 <TableCell style={{ width: 160 }} align="center">
                   {row.id_materia_particular}
@@ -78,6 +77,11 @@ return (
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="center">
                   {row.costo_hora + " Bs."}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="center">
+                  <ModalReservas
+                      clase={row._id}
+                    />
                 </TableCell>
               </TableRow>
             ))}

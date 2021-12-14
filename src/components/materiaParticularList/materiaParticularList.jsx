@@ -2,23 +2,34 @@ import React ,{ useState, useEffect } from 'react'
 import { DataGrid} from '@material-ui/data-grid'
 import './materiaParticularList.css'
 import {userRows} from '../../dataTest'
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
+import ModalClases from "../modals/ModalClases";
 import { DeleteOutlineOutlined } from "@material-ui/icons"
 
 export default function MateriaParticularList() {
     const [data, setData] = useState([]);
+    const location = useLocation();
+    //  const materiaParticular = location.state.materiaParticularSend;
+    //  const id_usuario = materiaParticular.id;
+    let usuario = null;
     
-    useEffect(() => {
-        const getMateriasParticulares = () =>{
-            fetch('http://localhost:3800/api/getMateriasParticulares')
-            .then(res => res.json())
-            .then(res => {
-                if(res) {
-                    setData(res.materia_particular)
-                }
-            })
+    useEffect(async () => {
+        try {
+            usuario = JSON.parse(localStorage.getItem('usuario'));
+
+            const getMateriasProfesor = () =>{
+                fetch('http://localhost:3800/api/getMateriasProfesor/'+usuario.sudId)
+                .then(res => res.json())
+                .then(res => {
+                    if(res) {
+                        setData(res.materiasProfesor)
+                    }
+                })
+            }
+            getMateriasProfesor()
+        } catch(err) {
+            alert('Usuario no encontrado');
         }
-        getMateriasParticulares()
     }, [])
     
     const handleDelete = (id) =>{
@@ -54,7 +65,27 @@ export default function MateriaParticularList() {
                     </>
                 )
             }
+        },
+        { field: 'crear_clases', headerName: 'Asignar', width: 150, headerStyle: {textjustify: 'center'},
+        renderCell: (params) =>{
+            return(
+                <>  
+                     <ModalClases clase={params.row._id}/>
+                </>
+            )
         }
+        },
+        { field: 'ver_clases', headerName: 'Clases', width: 150,
+            renderCell: (params) =>{
+                return(
+                    <>  
+                        <Link to={"/clasesProfesor/"+params.row.id_usuario+"/"+params.row._id} state={{ claseSend : params.row }}>
+                            <button className='materiaParticularListEdit'>Ver Clases</button>
+                        </Link>
+                    </>
+                )
+            }
+        },
       ];
       
         return (
@@ -67,6 +98,7 @@ export default function MateriaParticularList() {
                     rowsPerPageOptions={[5]}
                     checkboxSelection
                 />
+                <Link to={"/newMateriaParticular/"}>+ Add</Link>
             </div>
         )
 }

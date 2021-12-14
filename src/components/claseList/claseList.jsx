@@ -1,88 +1,65 @@
 import React ,{ useState, useEffect } from 'react'
+import { DataGrid } from '@material-ui/data-grid'
+import Divider from '@mui/material/Divider'
 import './claseList.css'
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
-
+import ModalReservas from "../modals/ModalReservas";
 export default function ClaseList() {
-    const [data, setData] = useState([]);
 
+    //GET CLASES
+    const [data, setData] = useState([]);
+    const [usuario, setUsuario] = useState([]);
+    const [contenido, setContenido] = useState([]);
 
     useEffect(() => {
-        const getClases = () =>{
-            fetch('http://localhost:3800/api/getClases')
+        try {
+            setUsuario(JSON.parse(localStorage.getItem('usuario')));
+        } catch(err){}
+
+        const getClases = async () =>{
+            await fetch('http://localhost:3800/api/getClases')
             .then(res => res.json())
             .then(res => {
                 if(res) {
-                    setData(res.Clases)
+                    console.log(res.Clases)
+                    var clases1 = res.Clases;
+                    clases1.forEach(Clase => {
+                        Clase.id_materia_particular1 = Clase.id_materia_particular._id;
+                        Clase.nombre_materia1 = Clase.id_materia_particular.nombre_materia;
+                    });
+                    setData(clases1);
+                    console.log(data);
                 }
             })
         }
         getClases()
     }, [])
-
+ 
+    //COLUMNAS TABLA
     const columns = [
-        {
-            id: "materia",
-            label: "Materia Particular",
-            minWidth: 170,
-            align: "center",
-        },
-        {
-            id: "direccion",
-            label: "Dirección",
-            minWidth: 170,
-            align: "center",
-        },
-        {
-            id: "Limite",
-            label: "Limite",
-            minWidth: 170,
-            align: "center",
-        },      
-        {
-            id: "Costo",
-            label: "Costo x Hora",
-            minWidth: 170,
-            align: "center",
-        },
-        {
-            id: "Acciones",
-            label: "Acciones",
-            minWidth: 170,
-            align: "center",
-        },
-      ];
+      { field: "nombre_materia1", headerName: 'Materia', width: 250 },
+      { field: 'direccion', headerName: 'Direccion', width: 150 },
+      { field: 'limite', headerName: 'Limite', width: 150 },
+      { field: 'costo_hora', headerName: 'Costo x Hora', width: 150,},
+      { field: 'Acciones', headerName: 'Asignar', width: 150, headerStyle: {textjustify: 'center'},
+      renderCell: (params) =>{
+          return(
+              (usuario.tipo === 'Profesor') ?<>Ninguna</> : <><ModalReservas clase={params.row._id}/></>
+          )
+      }
+      }
+    ];
       
 return (
     <div className='userList'>
-        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell key={column.id} align={column.align} style={{ top: 57, minWidth: column.minWidth }}>
-                  <b>{column.label}</b>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-        <TableBody>
-            {(data).map((row) => (
-              <TableRow key={row._id}>
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.id_materia_particular}
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.direccion}
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.limite + " alumnos"}
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="center">
-                  {row.costo_hora + " Bs."}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <h2>Clases disponibles</h2>
+        {/* <Divider/> */}
+        <DataGrid
+          getRowId={(row)=>row._id}
+          rows={data}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          />
     </div>
 );
 
